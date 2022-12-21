@@ -1,40 +1,111 @@
 #include "main.h"
 
 /**
- * aux_help - Help information for the builtin help.
- * Return: no return
+ * add_sep_node_end - adds a separator found at the end
+ * of a sep_list.
+ * @head: head of the linked list.
+ * @sep: separator found (; | &).
+ * Return: address of the head.
  */
-void aux_help(void)
+sep_list *add_sep_node_end(sep_list **head, char sep)
 {
-	char *help = "help: help [-dms] [pattern ...]\n";
+	sep_list *new, *temp;
 
-	write(STDOUT_FILENO, help, _strlen(help));
-	help = "\tDisplay information about builtin commands.\n ";
-	write(STDOUT_FILENO, help, _strlen(help));
-	help = "Displays brief summaries of builtin commands.\n";
-	write(STDOUT_FILENO, help, _strlen(help));
+	new = malloc(sizeof(sep_list));
+	if (new == NULL)
+		return (NULL);
+
+	new->separator = sep;
+	new->next = NULL;
+	temp = *head;
+
+	if (temp == NULL)
+	{
+		*head = new;
+	}
+	else
+	{
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = new;
+	}
+
+	return (*head);
 }
-/**
- * aux_help_alias - Help information for the builtin alias.
- * Return: no return
- */
-void aux_help_alias(void)
-{
-	char *help = "alias: alias [-p] [name[=value]...]\n";
 
-	write(STDOUT_FILENO, help, _strlen(help));
-	help = "\tDefine or display aliases.\n ";
-	write(STDOUT_FILENO, help, _strlen(help));
+/**
+ * free_sep_list - frees a sep_list
+ * @head: head of the linked list.
+ * Return: no return.
+ */
+void free_sep_list(sep_list **head)
+{
+	sep_list *temp;
+	sep_list *curr;
+
+	if (head != NULL)
+	{
+		curr = *head;
+		while ((temp = curr) != NULL)
+		{
+			curr = curr->next;
+			free(temp);
+		}
+		*head = NULL;
+	}
 }
-/**
- * aux_help_cd - Help information for the builtin alias.
- * Return: no return
- */
-void aux_help_cd(void)
-{
-	char *help = "cd: cd [-L|[-P [-e]] [-@]] [dir]\n";
 
-	write(STDOUT_FILENO, help, _strlen(help));
-	help = "\tChange the shell working directory.\n ";
-	write(STDOUT_FILENO, help, _strlen(help));
+/**
+ * add_line_node_end - adds a command line at the end
+ * of a line_list.
+ * @head: head of the linked list.
+ * @line: command line.
+ * Return: address of the head.
+ */
+line_list *add_line_node_end(line_list **head, char *line)
+{
+	line_list *new, *temp;
+
+	new = malloc(sizeof(line_list));
+	if (new == NULL)
+		return (NULL);
+
+	new->line = line;
+	new->next = NULL;
+	temp = *head;
+
+	if (temp == NULL)
+	{
+		*head = new;
+	}
+	else
+	{
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = new;
+	}
+
+	return (*head);
+}
+
+/**
+ * free_line_list - frees a line_list
+ * @head: head of the linked list.
+ * Return: no return.
+ */
+void free_line_list(line_list **head)
+{
+	line_list *temp;
+	line_list *curr;
+
+	if (head != NULL)
+	{
+		curr = *head;
+		while ((temp = curr) != NULL)
+		{
+			curr = curr->next;
+			free(temp);
+		}
+		*head = NULL;
+	}
 }
